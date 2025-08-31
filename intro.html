@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surat untuk Sera</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(to right, #ffe6f0, #ffb3d9);
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    /* Amplop */
+    .envelope {
+      position: relative;
+      width: 320px;
+      height: 200px;
+      background: #ff6f91;
+      cursor: pointer;
+      border-radius: 6px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+
+    /* Tutup segitiga atas */
+    .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 160px solid transparent;
+      border-right: 160px solid transparent;
+      border-bottom: 100px solid #ff8ab7;
+      transform-origin: top;
+      transition: transform 1s;
+    }
+
+    /* Isi surat */
+    .letter {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fffafc;
+      padding: 20px;
+      box-sizing: border-box;
+      font-size: 14px;
+      line-height: 1.6;
+      border: 1px solid #ddd;
+      overflow-y: auto;
+      transition: top 1s;
+      white-space: pre-line;
+    }
+
+    .open .flap {
+      transform: rotateX(180deg);
+    }
+
+    .open .letter {
+      top: 0;
+    }
+
+    /* Pita pink dengan love */
+    .ribbon {
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 30px;
+      background: #ff99cc;
+      border-radius: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    /* Love jatuh */
+    .heart {
+      position: fixed;
+      top: -20px;
+      color: red;
+      font-size: 20px;
+      animation: fall 4s linear forwards;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* Efek ketikan */
+    .typed {
+      border-right: 2px solid black;
+      white-space: pre-line;
+      display: inline-block;
+      animation: blink 0.7s step-end infinite;
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+  </style>
+</head>
+<body>
+  <div class="envelope" id="envelope">
+    <div class="flap"></div>
+    <div class="ribbon">❤️</div>
+    <div class="letter">
+      <span id="typedText" class="typed"></span>
+    </div>
+  </div>
+
+  <script>
+    const envelope = document.getElementById("envelope");
+    const typedText = document.getElementById("typedText");
+
+    const message = `Untuk Sera ❤️
+
+Aku pengen jujur sama kamu... Aku suka sama kamu udah dari lama.  
+Sejak pertama kali kamu main ke Khodam, entah kenapa ada sesuatu yang beda di hati aku.  
+Waktu kamu udah nggak main ke Khodam lagi, aku sering banget ngerasa kehilangan.  
+Aku bener-bener nungguin kamu, berharap suatu saat kamu balik lagi.  
+
+Dan kemarin, sejak kamu balik lagi ke Khodam...  
+rasa suka aku ke kamu jadi makin besar.  
+Setiap ketemu kamu, aku selalu seneng, seakan-akan hari itu jadi lebih indah.  
+
+Aku nggak tau gimana cara ngomong langsung ke kamu,  
+tapi lewat surat kecil ini aku cuma mau bilang:  
+"Aku suka sama kamu, Sera." ❤️`;
+
+    let i = 0;
+
+    envelope.addEventListener("click", () => {
+      envelope.classList.toggle("open");
+
+      if (envelope.classList.contains("open")) {
+        typedText.textContent = "";
+        i = 0;
+        typeWriter();
+
+        // buat love jatuh terus saat surat dibuka
+        const interval = setInterval(() => {
+          if (!envelope.classList.contains("open")) {
+            clearInterval(interval);
+            return;
+          }
+          const heart = document.createElement("div");
+          heart.classList.add("heart");
+          heart.textContent = "❤️";
+          heart.style.left = Math.random() * window.innerWidth + "px";
+          heart.style.fontSize = Math.random() * 20 + 15 + "px";
+          document.body.appendChild(heart);
+
+          setTimeout(() => heart.remove(), 4000);
+        }, 300);
+      }
+    });
+
+    function typeWriter() {
+      if (i < message.length) {
+        typedText.textContent += message.charAt(i);
+        i++;
+        setTimeout(typeWriter, 40); // kecepatan ketikan
+      }
+    }
+  </script>
+</body>
+</html>
